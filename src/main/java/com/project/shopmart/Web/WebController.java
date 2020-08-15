@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-@RestController
+@Controller
 public class WebController {
     @Autowired
     private ApplicationService applicationService;
@@ -53,8 +53,8 @@ public class WebController {
     public ResponseEntity<Map<String,String>> loginUser(@RequestBody Map<String,Object> user){
         String email=(String)user.get("email");
         String password =(String) user.get("password");
-        User getUSer=applicationService.validateUser(email,password);
-
+        User getUSer;
+        getUSer = applicationService.validateUser(email,password);
 
 
         return new ResponseEntity<>(generateJWTToken(getUSer), HttpStatus.OK);
