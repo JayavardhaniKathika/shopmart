@@ -38,7 +38,7 @@ public class ApplicationService {
 
         List<User> userList=new ArrayList<>();
         for(User user:users){
-            userList.add(user);
+                userList.add(user);
         }
         return userList;
     }
@@ -50,11 +50,9 @@ public class ApplicationService {
             userList=findAll();
 
             for(User user:userList){
-               //if (BCrypt.checkpw(password, BCrypt.hashpw(user.getPassword(),BCrypt.gensalt(10))))
-               if (BCrypt.checkpw(password, user.getPassword()))
-                    if (user.getEmail().equals(email)) {
-                        return user;
-                    }
+                if(user.getEmail().equals(email) && BCrypt.checkpw(password,user.getPassword())){
+                    return user;
+                }
             }
             throw new EtAuthException("Invalid Email/password");
 
@@ -78,15 +76,15 @@ public class ApplicationService {
         User existingUser=null;
         for(User user:userList){
             if(user.getEmail().equals(id)){
-                existingUser=new User();
-                existingUser.setEmail(user.getEmail());
-                existingUser.setUserId(user.getUserId());
-                existingUser.setPassword(user.getPassword());
-                existingUser.setMobileNumber(user.getMobileNumber());
-                existingUser.setAddress(user.getAddress());
-                existingUser.setLastName(user.getLastName());
-                existingUser.setFirstName(user.getFirstName());
-                return user;
+               existingUser=new User();
+               existingUser.setEmail(user.getEmail());
+               existingUser.setUserId(user.getUserId());
+               existingUser.setPassword(user.getPassword());
+               existingUser.setMobileNumber(user.getMobileNumber());
+               existingUser.setAddress(user.getAddress());
+               existingUser.setLastName(user.getLastName());
+               existingUser.setFirstName(user.getFirstName());
+               return user;
             }
         }
         return existingUser;
