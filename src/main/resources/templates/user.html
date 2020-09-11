@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title>User Page</title>
 </head>
 <body>
 
 <h1>Hello</h1>
-<p>Welcome User!!!</p>
-
+<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+<form th:action="@{/logout}" method="post">
+</form>
 </body>
 </html>

@@ -15,7 +15,7 @@
     #login .container #login-row #login-column #login-box {
     margin-top: 120px;
     max-width: 600px;
-    height: 320px;
+    height: 345px;
     border: 1px solid #9C9C9C;
     background-color: #EAEAEA;
     }
@@ -25,9 +25,42 @@
     #login .container #login-row #login-column #login-box #login-form #register-link {
     margin-top: -85px;
     }
+    .center {
+  text-align: center;
+
+}
     </style>
     <script>
+        function myFunction() {
+<!--          console.log("The form was submitted");-->
+          let userName = document.getElementById("username").value;
+          let userPassword =  document.getElementById("password").value;
 
+          let data = {"email":userName, "password": userPassword};
+
+          $.ajax({
+              type: "POST",
+              url: "/login",
+              data: JSON.stringify(data),
+              success: function(data){
+<!--                document.getElementById("login-status").innerHTML = "Success";-->
+<!--                token = data.token-->
+<!--                sessionStorage.setItem('usertoken', token);-->
+<!--                token = "Bearer " + token;-->
+<!--                localStorage.setItem("Authorization",data.token);-->
+                window.location.href = "userPage/dashboard";
+
+              },
+              dataType: "json",
+              contentType: "application/json; charset=utf-8",
+              failure: function(errMsg) {
+                document.getElementById("login-status").innerHTML = "Email or password is invalid";
+              },
+              error: function(errMsg) {
+                document.getElementById("login-status").innerHTML = "Email or password is invalid";
+              }
+            });
+        }
     </script>
 
 </head>
@@ -40,22 +73,32 @@
         <div id="login-row" class="row justify-content-center align-items-center">
             <div id="login-column" class="col-md-6">
                 <div id="login-box" class="col-md-12">
-                    <form id="login-form" class="form" action="#" th:action="@{/login}" th:object="${loginDAO}" method="post">
+                    <form id="login-form" class="form" action="#"  method="post">
                         <h3 class="text-center text-info">Login</h3>
                         <div class="form-group">
                             <label for="username" class="text-info">Username:</label><br>
-                            <input type="text" name="username" id="username" class="form-control" placeholder="Enter Username" th:field="*{email}" required>
+                            <input type="text" name="username" id="username" class="form-control" placeholder="Enter Username"  required>
                         </div>
                         <div class="form-group">
                             <label for="password" class="text-info">Password:</label><br>
-                            <input type="password" name="password" id="password" class="form-control" placeholder="Enter Password" th:field="*{password}" required>
+                            <input type="password" name="password" id="password" class="form-control" placeholder="Enter Password"  required>
                         </div>
+                        <div align="center" >
+                            <label id="login-status" style="font-size=20;" class="text-info"> </label>
+                        </div>
+
                         <div class="form-group">
                             <label for="remember-me" class="text-info"><span>Remember me</span> <span><input id="remember-me" name="remember-me" type="checkbox"></span></label><br>
-                            <input type="submit" name="submit" class="btn btn-info btn-md" value="submit">
+                            <input type="button" class="btn btn-info btn-md col-md-4 text-center" onclick="myFunction()" value="Submit">
                         </div>
+
+                        <!-- <div class="form-group">
+                             <button type="submit"  name="submit" class="btn btn-info btn-md" value="submit"></button>
+                             <span><a href="/" th:href="@{/user}"></a></span>
+                         </div> -->
+
                         <div id="register-link" class="text-right">
-                            <a href="#" class="text-info">Register here</a>
+                            <a href="/registration" class="text-info">Register here</a>
                         </div>
                     </form>
                 </div>

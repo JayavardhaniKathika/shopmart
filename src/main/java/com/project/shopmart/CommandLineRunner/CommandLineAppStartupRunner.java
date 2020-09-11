@@ -1,6 +1,8 @@
 package com.project.shopmart.CommandLineRunner;
 
+import com.project.shopmart.data.entity.Product;
 import com.project.shopmart.data.entity.User;
+import com.project.shopmart.data.repository.ProductRepository;
 import com.project.shopmart.data.repository.UserRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import java.util.Optional;
 public class CommandLineAppStartupRunner implements CommandLineRunner {
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    ProductRepository productRepository;
     @Override
     public void run(String...args) throws Exception {
         Optional<User> user = userRepository.findById("admin@gmail.com");
@@ -28,5 +32,6 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
             userRepository.save(admin);
 
         }
+
     }
 }

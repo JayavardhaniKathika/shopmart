@@ -10,11 +10,26 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AuthFilter extends GenericFilterBean {
+
+    public boolean isTokenValid(HttpServletRequest httpRequest, HttpServletResponse httpResponse, String token) throws IOException, ServletException {
+        try{
+            Claims claims= Jwts.parser().setSigningKey(Constants.API_SECRET_KEY)
+                    .parseClaimsJws(token).getBody();
+            httpRequest.setAttribute("userId",Integer.parseInt(claims.get("userId").toString()));
+        }
+        catch (Exception e) {
+            httpResponse.sendError(HttpStatus.FORBIDDEN.value(), "invalid/expired token");
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpRequest=(HttpServletRequest) servletRequest;
@@ -25,13 +40,7 @@ public class AuthFilter extends GenericFilterBean {
             String [] authHeaderArray=authHeader.split("Bearer ");
             if(authHeaderArray.length>1 && authHeaderArray[1]!=null){
                 String token=authHeaderArray[1];
-                try{
-                    Claims claims= Jwts.parser().setSigningKey(Constants.API_SECRET_KEY)
-                            .parseClaimsJws(token).getBody();
-                    httpRequest.setAttribute("userId",Integer.parseInt(claims.get("userId").toString()));
-                }
-                catch (Exception e){
-                    httpResponse.sendError(HttpStatus.FORBIDDEN.value(),"invalid/expired token");
+                if (!isTokenValid(httpRequest, httpResponse, token)) {
                     return;
                 }
             }
@@ -39,6 +48,14 @@ public class AuthFilter extends GenericFilterBean {
                 httpResponse.sendError(HttpStatus.FORBIDDEN.value(),"Authorization token must be Bearer [token]");
                 return;
             }
+        }
+
+
+
+         else if (httpRequest.getCookies() != null) {
+            Cookie[] cookies = httpRequest.getCookies();
+//            for i in cookies
+
         }
         else{
             httpResponse.sendError(HttpStatus.FORBIDDEN.value(),"Authorization token must be provided");

@@ -19,14 +19,357 @@
       margin-bottom: 0;
     }
 
+
     /* Add a gray background color and some padding to the footer */
     footer {
       background-color: #f2f2f2;
       padding: 25px;
     }
   </style>
+    <script>
+            var total=0;
+            var count;
+            var j;
+
+            function myOnLoadFunction() {
+            count=0;
+            j=6;
+               $.ajax({
+              type: "GET",
+              url: "/inventory?from=0"+"&to=6",
+
+              success: function(data){
+
+               var i;
+
+
+               console.log(typeof data)
+               console.log(Object.keys(data)[0])
+               console.log(Object.values(data)[0])
+
+               var len=Object.values(data)[0].length
+               total=Object.keys(data)[0]
+
+
+               var nextElement=document.getElementById("next")
+               if(total==len){
+                    var e=document.getElementById("nex")
+                    e.setAttribute("class", "page-item disabled");
+                    nextElement.setAttribute("aria-disabled", true);
+                    nextElement.setAttribute("tabindex", "-1");
+
+
+               }
+               else{
+                    nextElement.setAttribute("aria-disabled", false);
+
+               }
+                var e=document.getElementById("prev")
+                e.setAttribute("class", "page-item disabled");
+                var previousElement = document.getElementById("previous")
+<!--                previousElement.setAttribute("aria-disabled", "true");-->
+                previousElement.setAttribute("tabindex", "-1");
+
+               for (i = 0; i < len; i++) {
+
+                    var col = document.createElement("div");
+                    col.className = "col-sm-4"
+
+                    var first = document.createElement("div");
+                    first.className = "panel panel-primary"
+
+                    var second = document.createElement("div");
+                    second.className = "panel-heading";
+
+
+                    var node = document.createTextNode(Object.values(data)[0][i].productName);
+                    second.appendChild(node);
+
+                    var third = document.createElement("div");
+                    third.className = "panel-body"
+
+                    var image= document.createElement("IMG");
+                    image.setAttribute("src", "https://i.ibb.co/sRwC7LZ/Methow-Hard-Red-Wheat-Flour.jpg");
+                    image.setAttribute("class", "img-responsive");
+                    image.setAttribute("style", "width:100%");
+                    image.setAttribute("alt", "Image");
+
+                   third.appendChild(image);
+
+                   var fourth = document.createElement("div");
+                    fourth.className = "panel-footer";
+
+                    var nodeTwo = document.createTextNode("Buy");
+                    fourth.appendChild(nodeTwo);
+
+                    col.appendChild(first);
+                    first.appendChild(second);
+                    first.appendChild(third);
+                    first.appendChild(fourth);
+
+                    var element = document.getElementById("dashBoardRow");
+                    element.appendChild(col);
+
+
+
+                }
+
+
+
+              },
+              dataType: "json",
+              contentType: "application/json; charset=utf-8",
+              failure: function(errMsg) {
+
+                alert("failure")
+              },
+              error: function(errMsg) {
+                alert("error")
+              }
+            });
+            }
+
+
+            function onNextClick() {
+            count=count+6
+            j=j+6
+               $.ajax({
+              type: "GET",
+              url: "/inventory?from="+count+"&to="+j,
+
+              success: function(data){
+
+
+               var i;
+
+               console.log(typeof data)
+               console.log(Object.keys(data)[0])
+               console.log(Object.values(data)[0])
+               var len=Object.values(data)[0].length
+
+
+               var nextElement=document.getElementById("next");
+               var status=nextElement.getAttribute("aria-disabled");
+
+            if(status=="false"){
+
+               var element = document.getElementById("dashBoardRow");
+              element.innerHTML = '';
+
+               for (i = 0; i < len; i++) {
+
+                    var col = document.createElement("div");
+                    col.className = "col-sm-4"
+
+                    var first = document.createElement("div");
+                    first.className = "panel panel-primary"
+
+                    var second = document.createElement("div");
+                    second.className = "panel-heading";
+
+
+                    var node = document.createTextNode(Object.values(data)[0][i].productName);
+                    second.appendChild(node);
+
+                    var third = document.createElement("div");
+                    third.className = "panel-body"
+
+                    var image= document.createElement("IMG");
+                    image.setAttribute("src", "https://5.imimg.com/data5/UB/WG/JK/SELLER-98634555/brown-plain-industrial-jute-sack-bag-500x500.jpg");
+                    image.setAttribute("class", "img-responsive");
+                    image.setAttribute("style", "width:100%");
+                    image.setAttribute("alt", "Image");
+
+                   third.appendChild(image);
+
+                   var fourth = document.createElement("div");
+                    fourth.className = "panel-footer";
+
+                    var nodeTwo = document.createTextNode("Buy");
+                    fourth.appendChild(nodeTwo);
+
+                    col.appendChild(first);
+                    first.appendChild(second);
+                    first.appendChild(third);
+                    first.appendChild(fourth);
+
+
+                    element.appendChild(col);
+
+
+
+                }
+
+                }
+                else{
+                    count=count-6;
+                    j=j-6;
+                }
+
+
+
+                var e=document.getElementById("prev")
+                e.setAttribute("class", "page-item");
+                var previousElement = document.getElementById("previous")
+                previousElement.setAttribute("aria-disabled", "false");
+                previousElement.setAttribute("tabindex", "-1");
+
+
+
+               if(j>total){
+                    var e=document.getElementById("nex")
+                    e.setAttribute("class", "page-item disabled");
+                    nextElement.setAttribute("aria-disabled", true);
+                     nextElement.setAttribute("tabindex", "-1");
+
+
+               }
+               else{
+                    nextElement.setAttribute("aria-disabled", false);
+
+               }
+
+
+
+
+
+              },
+              dataType: "json",
+              contentType: "application/json; charset=utf-8",
+              failure: function(errMsg) {
+
+                alert("failure")
+              },
+              error: function(errMsg) {
+                alert("error")
+              }
+            });
+            }
+
+            function onPrevClick() {
+               if(count>0){
+               count=count-6
+                j=j-6
+               }
+
+               $.ajax({
+              type: "GET",
+              url: "/inventory?from="+count+"&to="+j,
+
+              success: function(data){
+
+
+               var i;
+
+               console.log(typeof data)
+               console.log(Object.keys(data)[0])
+               console.log(Object.values(data)[0])
+               var len=Object.values(data)[0].length
+
+
+               var prevElement=document.getElementById("previous");
+               var status=prevElement.getAttribute("aria-disabled");
+
+            if(status=="false"){
+
+               var element = document.getElementById("dashBoardRow");
+              element.innerHTML = '';
+
+               for (i = 0; i < len; i++) {
+
+                    var col = document.createElement("div");
+                    col.className = "col-sm-4"
+
+                    var first = document.createElement("div");
+                    first.className = "panel panel-primary"
+
+                    var second = document.createElement("div");
+                    second.className = "panel-heading";
+
+
+                    var node = document.createTextNode(Object.values(data)[0][i].productName);
+                    second.appendChild(node);
+
+                    var third = document.createElement("div");
+                    third.className = "panel-body"
+
+                    var image= document.createElement("IMG");
+                    image.setAttribute("src", "https://5.imimg.com/data5/UB/WG/JK/SELLER-98634555/brown-plain-industrial-jute-sack-bag-500x500.jpg");
+                    image.setAttribute("class", "img-responsive");
+                    image.setAttribute("style", "width:100%");
+                    image.setAttribute("alt", "Image");
+
+                   third.appendChild(image);
+
+                   var fourth = document.createElement("div");
+                    fourth.className = "panel-footer";
+
+                    var nodeTwo = document.createTextNode("Buy");
+                    fourth.appendChild(nodeTwo);
+
+                    col.appendChild(first);
+                    first.appendChild(second);
+                    first.appendChild(third);
+                    first.appendChild(fourth);
+
+
+                    element.appendChild(col);
+
+
+
+                }
+
+                }
+                else{
+                    count=count+6;
+                    j=j+6;
+                }
+
+
+                var e=document.getElementById("nex")
+                e.setAttribute("class", "page-item");
+               var nextElement=document.getElementById("next");
+              nextElement.setAttribute("aria-disabled", false);
+<!--              nextElement.setAttribute("tabindex", "-1");-->
+
+
+               if(count<6){
+                    var e=document.getElementById("prev")
+                    e.setAttribute("class", "page-item disabled");
+                    prevElement.setAttribute("aria-disabled", true);
+                     prevElement.setAttribute("tabindex", "-1");
+
+
+               }
+               else{
+                    prevElement.setAttribute("aria-disabled", false);
+
+               }
+
+
+
+
+
+              },
+              dataType: "json",
+              contentType: "application/json; charset=utf-8",
+              failure: function(errMsg) {
+
+                alert("failure")
+              },
+              error: function(errMsg) {
+                alert("error")
+              }
+            });
+            }
+
+
+
+
+    </script>
+
 </head>
-<body>
+<body onload="myOnLoadFunction()">
 
 
 <nav class="navbar navbar-inverse">
@@ -58,57 +401,20 @@
 </nav>
 
 <div class="container">
-    <div class="row">
-        <div class="col-sm-4">
-            <div class="panel panel-primary">
-                <div class="panel-heading">ProductName</div>
-                <div class="panel-body"><img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
-                <div class="panel-footer">Buy</div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="panel panel-primary">
-                <div class="panel-heading">ProductName</div>
-                <div class="panel-body"><img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
-                <div class="panel-footer">Buy </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="panel panel-primary">
-                <div class="panel-heading">ProductName</div>
-                <div class="panel-body"><img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
-                <div class="panel-footer">Buy </div>
-            </div>
-        </div>
+    <div class="row" id="dashBoardRow">
+
     </div>
 </div><br>
-
-<div class="container">
-    <div class="row">
-        <div class="col-sm-4">
-            <div class="panel panel-primary">
-                <div class="panel-heading">ProductName</div>
-                <div class="panel-body"><img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
-                <div class="panel-footer">Buy </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="panel panel-primary">
-                <div class="panel-heading">ProductName</div>
-                <div class="panel-body"><img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
-                <div class="panel-footer">Buy</div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="panel panel-primary">
-                <div class="panel-heading">ProductName</div>
-                <div class="panel-body"><img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
-                <div class="panel-footer">Buy </div>
-            </div>
-        </div>
-    </div>
-</div><br><br>
-
+<nav >
+    <ul class="pagination justify-content-center">
+        <li id="prev" class="page-item">
+            <a onclick="onPrevClick()" id="previous" class="page-link" >Previous</a>
+        </li>
+        <li  id="nex" class="page-item">
+            <a onclick="onNextClick()" id="next" class="page-link" >Next</a>
+        </li>
+    </ul>
+</nav>
 <footer class="container-fluid text-center">
     <p>Online Store Copyright</p>
     <form class="form-inline">Get deals:
